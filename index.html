@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101713">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Gym Plan">
+<title>My Gym Plan</title>
+<style>
+:root{--bg:#0c120f;--panel:#151f19;--panel2:#1b2820;--text:#f3f7f3;--muted:#aab8ae;--green:#a8edbd;--line:#2b3b30;--accent:#d9fbe2}
+*{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#14251a 0,#0c120f 260px);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.45;padding:env(safe-area-inset-top) 0 calc(28px + env(safe-area-inset-bottom))}
+.wrap{max-width:760px;margin:auto;padding:18px 16px 36px}.hero{padding:18px 4px 20px}.eyebrow{color:var(--green);font-size:.76rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase}.hero h1{font-size:2.2rem;line-height:1.05;margin:8px 0 10px;letter-spacing:-.04em}.hero p{color:var(--muted);margin:0;max-width:560px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:20px}.stat{background:rgba(21,31,25,.9);border:1px solid var(--line);border-radius:15px;padding:12px 10px}.stat strong{display:block;font-size:1.08rem;color:var(--accent)}.stat span{font-size:.72rem;color:var(--muted)}
+nav{display:flex;gap:8px;overflow:auto;padding:4px 0 14px;position:sticky;top:0;background:rgba(12,18,15,.94);backdrop-filter:blur(12px);z-index:5;margin:0 -16px;padding:10px 16px}nav a{flex:0 0 auto;color:var(--text);text-decoration:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 12px;font-size:.83rem}
+section{margin-top:18px;scroll-margin-top:70px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:0 2px 10px}.section-head h2{font-size:1.28rem;margin:0;letter-spacing:-.02em}.section-head p{margin:0;color:var(--muted);font-size:.8rem}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px;margin-bottom:10px}.daytop{display:flex;align-items:center;gap:10px;margin-bottom:12px}.daybadge{display:grid;place-items:center;min-width:46px;height:46px;border-radius:13px;background:#243c2c;color:var(--green);font-weight:900;font-size:.77rem}.daytop h3{margin:0;font-size:1.06rem}.daytop p{margin:2px 0 0;color:var(--muted);font-size:.82rem}.pill{margin-left:auto;font-size:.72rem;color:var(--green);background:#203629;padding:5px 8px;border-radius:999px;white-space:nowrap}
+.exercise{display:grid;grid-template-columns:24px 1fr auto;gap:9px;align-items:start;padding:11px 0;border-top:1px solid var(--line)}.exercise input,.checkline input{width:20px;height:20px;accent-color:#75d993;margin:2px 0 0}.exname{font-weight:700;font-size:.94rem}.exdetail{font-size:.8rem;color:var(--muted);margin-top:3px}.reps{font-size:.78rem;color:var(--green);font-weight:800;text-align:right;white-space:nowrap}.exercise:has(input:checked) .exname{text-decoration:line-through;color:#8a9a8e}.note{background:#1d2d22;border:1px solid #35533d;border-radius:13px;padding:12px 13px;color:#d9e9dc;font-size:.85rem}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.macro{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:13px}.macro span{color:var(--muted);font-size:.78rem;display:block}.macro strong{font-size:1.25rem;display:block;margin-top:3px}.macro small{color:var(--muted)}.list{padding-left:20px;margin:8px 0;color:#dbe5dd}.list li{margin:7px 0}.checkline{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid var(--line)}.checkline:last-child{border-bottom:0}.checkline label{font-size:.9rem}.muted{color:var(--muted)}.buttonrow{display:flex;gap:8px;margin-top:12px}.btn{border:1px solid var(--line);border-radius:11px;padding:10px 12px;background:var(--panel2);color:var(--text);font-weight:700;font-size:.83rem}.btn.primary{background:var(--green);color:#102016;border-color:var(--green)}.progressbar{height:7px;background:#29362d;border-radius:99px;overflow:hidden;margin-top:10px}.progressbar div{height:100%;width:0;background:var(--green);transition:width .2s}.footer{text-align:center;color:var(--muted);font-size:.76rem;padding:22px 12px 0}
+@media(min-width:600px){.hero h1{font-size:2.8rem}.grid2{grid-template-columns:repeat(4,1fr)}}
+
+.exercise{cursor:pointer;border-radius:9px;transition:background .15s}
+.exercise:active{background:#203629}
+.exercise .exname:after{content:"  ↗";font-size:.75rem;color:var(--green);font-weight:600}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.76);display:none;align-items:flex-end;justify-content:center;padding:12px;padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+.modal.open{display:flex}
+.modalbox{width:100%;max-width:560px;max-height:90dvh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 20px 70px #0009}
+.modalhead{display:flex;gap:12px;align-items:flex-start;justify-content:space-between}
+.modalhead h2{font-size:1.3rem;margin:0 0 4px}.modalhead p{margin:0;color:var(--muted);font-size:.85rem}
+.closebtn{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:50%;width:38px;height:38px;font-size:1.25rem;flex-shrink:0}
+.detailgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.detailstat{background:var(--panel2);border-radius:12px;padding:10px}.detailstat span{display:block;color:var(--muted);font-size:.72rem}.detailstat strong{font-size:1rem}
+.howto{padding-left:20px;margin:8px 0 14px}.howto li{margin:7px 0;font-size:.9rem}
+
+
+.exercise .exbody{min-width:0}
+.watch-link{display:inline-block;margin-top:7px;color:var(--green);font-size:.78rem;font-weight:800;text-decoration:none;border:1px solid #35533d;background:#203629;padding:6px 9px;border-radius:8px}.watch-link:active{opacity:.75}
+@media(max-width:380px){}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="hero">
+  <div class="eyebrow">Your repeatable weekly routine</div>
+  <h1>My Gym Plan<span style="color:var(--green)">.</span></h1>
+  <p>Build muscle, lose fat, and keep showing up. Check off each exercise as you complete it—your progress stays saved on this device.</p>
+  <div class="stats">
+    <div class="stat"><strong>217 lb</strong><span>Current weight</span></div>
+    <div class="stat"><strong>5 days</strong><span>Lift each week</span></div>
+    <div class="stat"><strong>2,800</strong><span>Starting kcal/day</span></div>
+  </div>
+</header>
+<nav aria-label="Plan sections">
+  <a href="#week">Weekly plan</a><a href="#nutrition">Nutrition</a><a href="#creatine">Creatine</a><a href="#progress">Progress rules</a>
+</nav>
+
+<section id="week">
+  <div class="section-head"><h2>Weekly workouts</h2><p id="progressText">0 exercises checked</p></div>
+  <div class="progressbar"><div id="progressFill"></div></div>
+  <p class="muted" style="font-size:.8rem;margin:9px 2px 12px">Tap the checkbox beside each exercise. Checkmarks are saved in this browser.</p>
+
+  <article class="card workout" data-day="mon">
+    <div class="daytop"><div class="daybadge">MON</div><div><h3>Upper Body Strength</h3><p>Chest · Back · Shoulders · Arms</p></div><span class="pill">Workout 1</span></div>
+    <div class="exercise"><input type="checkbox" id="mon1"><div><div class="exname">Barbell bench press</div><div class="exdetail">Controlled reps; keep shoulders stable.</div></div><div class="reps">3 × 5–8</div></div>
+    <div class="exercise"><input type="checkbox" id="mon2"><div><div class="exname">Chest-supported row</div><div class="exdetail">Pull elbows back without momentum.</div></div><div class="reps">3 × 6–10</div></div>
+    <div class="exercise"><input type="checkbox" id="mon3"><div><div class="exname">Incline dumbbell press</div><div class="exdetail">Use a comfortable range of motion.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="mon4"><div><div class="exname">Lat pulldown</div><div class="exdetail">Pull toward upper chest; control the return.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="mon5"><div><div class="exname">Dumbbell lateral raise</div><div class="exdetail">Light enough to avoid swinging.</div></div><div class="reps">3 × 12–20</div></div>
+    <div class="exercise"><input type="checkbox" id="mon6"><div><div class="exname">Cable triceps pushdown</div><div class="exdetail">Keep upper arms near your sides.</div></div><div class="reps">2 × 10–15</div></div>
+    <div class="exercise"><input type="checkbox" id="mon7"><div><div class="exname">Dumbbell biceps curl</div><div class="exdetail">Avoid swinging your torso.</div></div><div class="reps">2 × 10–15</div></div>
+  </article>
+
+  <article class="card workout" data-day="tue">
+    <div class="daytop"><div class="daybadge">TUE</div><div><h3>Lower Body Strength</h3><p>Quads · Hamstrings · Glutes · Calves</p></div><span class="pill">Workout 2</span></div>
+    <div class="exercise"><input type="checkbox" id="tue1"><div><div class="exname">Back squat</div><div class="exdetail">Warm up first; use a pain-free depth.</div></div><div class="reps">3 × 5–8</div></div>
+    <div class="exercise"><input type="checkbox" id="tue2"><div><div class="exname">Romanian deadlift</div><div class="exdetail">Hinge at hips; keep weights close to legs.</div></div><div class="reps">3 × 6–10</div></div>
+    <div class="exercise"><input type="checkbox" id="tue3"><div><div class="exname">Leg press</div><div class="exdetail">Keep your lower back against the pad.</div></div><div class="reps">3 × 10–12</div></div>
+    <div class="exercise"><input type="checkbox" id="tue4"><div><div class="exname">Seated leg curl</div><div class="exdetail">Pause briefly at the contracted position.</div></div><div class="reps">3 × 10–15</div></div>
+    <div class="exercise"><input type="checkbox" id="tue5"><div><div class="exname">Standing calf raise</div><div class="exdetail">Use a full, controlled range of motion.</div></div><div class="reps">3 × 10–15</div></div>
+    <div class="exercise"><input type="checkbox" id="tue6"><div><div class="exname">Cable crunch</div><div class="exdetail">Curl through your torso, don't just pull with arms.</div></div><div class="reps">3 × 10–15</div></div>
+  </article>
+
+  <article class="card workout" data-day="wed">
+    <div class="daytop"><div class="daybadge">WED</div><div><h3>Push Hypertrophy</h3><p>Chest · Shoulders · Triceps</p></div><span class="pill">Workout 3</span></div>
+    <div class="exercise"><input type="checkbox" id="wed1"><div><div class="exname">Incline machine or dumbbell press</div><div class="exdetail">Keep reps smooth and controlled.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="wed2"><div><div class="exname">Machine chest press</div><div class="exdetail">Don't bounce at the bottom.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="wed3"><div><div class="exname">Seated shoulder press</div><div class="exdetail">Stop if you feel shoulder pain.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="wed4"><div><div class="exname">Cable lateral raise</div><div class="exdetail">Avoid shrugging your shoulders.</div></div><div class="reps">3 × 12–20</div></div>
+    <div class="exercise"><input type="checkbox" id="wed5"><div><div class="exname">Pec deck</div><div class="exdetail">Use a comfortable stretch, no bouncing.</div></div><div class="reps">2 × 12–15</div></div>
+    <div class="exercise"><input type="checkbox" id="wed6"><div><div class="exname">Overhead cable triceps extension</div><div class="exdetail">Keep elbows steady.</div></div><div class="reps">3 × 10–15</div></div>
+  </article>
+
+  <article class="card workout" data-day="thu">
+    <div class="daytop"><div class="daybadge">THU</div><div><h3>Pull Hypertrophy</h3><p>Back · Rear Delts · Biceps</p></div><span class="pill">Workout 4</span></div>
+    <div class="exercise"><input type="checkbox" id="thu1"><div><div class="exname">Pull-ups or lat pulldown</div><div class="exdetail">Choose a variation that lets you control each rep.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="thu2"><div><div class="exname">Seated cable row</div><div class="exdetail">Avoid rocking your torso back and forth.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="thu3"><div><div class="exname">One-arm dumbbell row</div><div class="exdetail">Keep your torso stable.</div></div><div class="reps">2 × 10–12</div></div>
+    <div class="exercise"><input type="checkbox" id="thu4"><div><div class="exname">Reverse pec deck</div><div class="exdetail">Focus on rear shoulders, not momentum.</div></div><div class="reps">3 × 12–20</div></div>
+    <div class="exercise"><input type="checkbox" id="thu5"><div><div class="exname">EZ-bar curl</div><div class="exdetail">Keep elbows from drifting forward.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="thu6"><div><div class="exname">Hammer curl</div><div class="exdetail">Keep wrists neutral.</div></div><div class="reps">2 × 10–15</div></div>
+  </article>
+
+  <article class="card workout" data-day="fri">
+    <div class="daytop"><div class="daybadge">FRI</div><div><h3>Legs & Abs</h3><p>Quads · Hamstrings · Glutes · Core</p></div><span class="pill">Workout 5</span></div>
+    <div class="exercise"><input type="checkbox" id="fri1"><div><div class="exname">Hack squat or leg press</div><div class="exdetail">Choose one; use a controlled range.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="fri2"><div><div class="exname">Bulgarian split squat</div><div class="exdetail">Use support for balance if needed.</div></div><div class="reps">2 × 8–12/leg</div></div>
+    <div class="exercise"><input type="checkbox" id="fri3"><div><div class="exname">Seated leg curl</div><div class="exdetail">Control both the lift and lowering.</div></div><div class="reps">3 × 10–15</div></div>
+    <div class="exercise"><input type="checkbox" id="fri4"><div><div class="exname">Hip thrust</div><div class="exdetail">Finish with glutes; avoid over-arching your back.</div></div><div class="reps">3 × 8–12</div></div>
+    <div class="exercise"><input type="checkbox" id="fri5"><div><div class="exname">Seated calf raise</div><div class="exdetail">Pause at the top and bottom.</div></div><div class="reps">3 × 12–20</div></div>
+    <div class="exercise"><input type="checkbox" id="fri6"><div><div class="exname">Hanging knee raise</div><div class="exdetail">Avoid swinging; use a captain's chair if needed.</div></div><div class="reps">3 × 10–15</div></div>
+  </article>
+
+  <article class="card">
+    <div class="daytop"><div class="daybadge">SAT</div><div><h3>Optional easy cardio</h3><p>Walk, cycle, or do something you enjoy</p></div></div>
+    <div class="checkline"><input type="checkbox" id="sat1"><label for="sat1">20–40 minutes of easy-to-moderate cardio</label></div>
+    <div class="checkline"><input type="checkbox" id="sat2"><label for="sat2">Work toward an average of 8,000–10,000 steps/day, building up gradually</label></div>
+  </article>
+  <article class="card">
+    <div class="daytop"><div class="daybadge">SUN</div><div><h3>Rest & reset</h3><p>Recover and get ready for next week</p></div></div>
+    <div class="checkline"><input type="checkbox" id="sun1"><label for="sun1">Meal prep and plan workouts</label></div>
+    <div class="checkline"><input type="checkbox" id="sun2"><label for="sun2">Review weekly average weight and training log</label></div>
+  </article>
+  <div class="buttonrow"><button class="btn primary" id="resetWeek">Reset workout checkboxes</button><button class="btn" id="printBtn">Print / Save PDF</button></div>
+</section>
+
+<section id="nutrition">
+  <div class="section-head"><h2>Nutrition targets</h2><p>Starting point</p></div>
+  <div class="grid2">
+    <div class="macro"><span>Calories</span><strong>2,800</strong><small>kcal per day</small></div>
+    <div class="macro"><span>Protein</span><strong>210 g</strong><small>daily target</small></div>
+    <div class="macro"><span>Carbs</span><strong>310 g</strong><small>daily target</small></div>
+    <div class="macro"><span>Fat</span><strong>80 g</strong><small>daily target</small></div>
+  </div>
+  <div class="card" style="margin-top:10px">
+    <h3 style="margin:0 0 8px">Simple nutrition rules</h3>
+    <ul class="list">
+      <li>Spread protein across 3–5 meals.</li>
+      <li>Build meals around lean protein, vegetables or fruit, high-fiber carbs, and healthy fats.</li>
+      <li>Drink water regularly; adjust for heat and sweat.</li>
+      <li>Weigh in several mornings per week and compare weekly averages.</li>
+      <li>After 2–3 weeks, if average weight is not trending down, reduce by 150–200 kcal; if losing too quickly or strength is dropping, add a little food.</li>
+    </ul>
+    <div class="note">Your calorie needs are an estimate. The trend over several weeks—not a single weigh-in—tells you whether to adjust.</div>
+  </div>
+</section>
+
+<section id="creatine">
+  <div class="section-head"><h2>Creatine</h2><p>Simple daily habit</p></div>
+  <div class="card">
+    <div class="daytop"><div class="daybadge">5 g</div><div><h3>Creatine monohydrate</h3><p>Every day, including rest days</p></div></div>
+    <p style="margin:0 0 10px">Best timing: whenever you will remember—breakfast, with a meal, or after training. Consistency matters more than the exact time.</p>
+    <div class="checkline"><input type="checkbox" id="creatineToday"><label for="creatineToday">I took today's 5 g dose</label></div>
+    <p class="muted" style="font-size:.8rem;margin:10px 0 0">Daily 3–5 g is the better-supported maintenance routine. No loading phase is required. A small increase in water weight can happen. If you have kidney disease or concerns about medications, check with a healthcare professional first.</p>
+  </div>
+</section>
+
+<section id="progress">
+  <div class="section-head"><h2>Progress rules</h2><p>Repeat every week</p></div>
+  <div class="card">
+    <div class="checkline"><input type="checkbox" id="rule1"><label for="rule1"><strong>Warm up:</strong> 5–8 minutes plus lighter warm-up sets before your first big lift.</label></div>
+    <div class="checkline"><input type="checkbox" id="rule2"><label for="rule2"><strong>Effort:</strong> Finish most working sets with about 1–3 reps left in reserve.</label></div>
+    <div class="checkline"><input type="checkbox" id="rule3"><label for="rule3"><strong>Rest:</strong> 2–3 minutes for big lifts; 60–120 seconds for isolation work.</label></div>
+    <div class="checkline"><input type="checkbox" id="rule4"><label for="rule4"><strong>Progressive overload:</strong> When you hit the top of the rep range on every set with good form, increase weight by the smallest practical amount.</label></div>
+    <div class="checkline"><input type="checkbox" id="rule5"><label for="rule5"><strong>Recovery:</strong> Aim for 7–9 hours of sleep and take rest days seriously.</label></div>
+    <div class="checkline"><input type="checkbox" id="rule6"><label for="rule6"><strong>Be patient:</strong> Follow the plan for 8–12 weeks and adjust based on performance, waist, and weight trends.</label></div>
+  </div>
+  <div class="note">Sharp pain is a reason to stop an exercise and reassess it. Good technique and sustainable progress beat lifting heavier at any cost.</div>
+</section>
+<div class="footer">Made for your weekly routine · Save this page to your iPhone Home Screen for quick access.</div>
+</div>
+
+<div class="modal" id="exerciseModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modalbox">
+    <div class="modalhead">
+      <div><h2 id="modalTitle">Exercise</h2><p id="modalSubtitle">Tap an exercise to view details</p></div>
+      <button class="closebtn" id="closeModal" aria-label="Close exercise details">×</button>
+    </div>
+<div class="detailgrid">
+      <div class="detailstat"><span>Sets × reps</span><strong id="modalSets">—</strong></div>
+      <div class="detailstat"><span>Rest between sets</span><strong id="modalRest">—</strong></div>
+      <div class="detailstat"><span>Effort</span><strong>1–3 reps left</strong></div>
+    </div>
+    <a class="watch-link" id="modalWatchLink" href="https://www.youtube.com/" target="_blank" rel="noopener">▶ Watch how to do it on YouTube</a>
+    <h3 style="margin:10px 0 4px">How to perform it</h3>
+    <ol class="howto" id="modalHowto"></ol>
+    <div class="note" id="modalTip">Use controlled reps and stop if you feel sharp pain.</div>
+    <div class="buttonrow"><button class="btn primary" id="doneExercise">Mark exercise complete</button></div>
+  </div>
+</div>
+
+<script>
+(function(){
+ const boxes=[...document.querySelectorAll('input[type="checkbox"]')];
+ const keyPrefix='myGymPlan_';
+ boxes.forEach(box=>{
+   try{box.checked=localStorage.getItem(keyPrefix+box.id)==='1'}catch(e){}
+   box.addEventListener('change',()=>{
+     try{localStorage.setItem(keyPrefix+box.id,box.checked?'1':'0')}catch(e){}
+     updateProgress();
+   });
+ });
+
+ const modal=document.getElementById('exerciseModal');
+ let activeExercise=null;
+ function restFor(name,reps){
+   const n=name.toLowerCase();
+   if(/bench press|back squat|romanian deadlift|deadlift|squat/.test(n)) return 120;
+   if(/row|pulldown|pull-up|shoulder press|leg press|split squat|hip thrust/.test(n)) return 90;
+   return 60;
+ }
+ function cuesFor(name){
+   const n=name.toLowerCase();
+   if(/bench press|chest press|incline.*press|pec deck/.test(n)) return ['Set your shoulders and feet firmly before starting.','Lower the weight under control; keep wrists stacked over elbows.','Press smoothly without bouncing or forcing a painful range.'];
+   if(/squat|leg press|split squat/.test(n)) return ['Brace your trunk and keep your feet planted.','Lower under control, keeping knees tracking in line with toes.','Drive through your feet to stand; use a pain-free range.'];
+   if(/romanian deadlift|hip thrust/.test(n)) return ['Brace your trunk and keep the weight close.','Move from your hips; avoid rounding or over-arching your back.','Finish by squeezing glutes, without leaning back excessively.'];
+   if(/row/.test(n)) return ['Start with shoulders controlled and torso stable.','Pull elbows toward your hips or ribs without swinging.','Pause briefly, then return slowly until you feel a comfortable stretch.'];
+   if(/pulldown|pull-up/.test(n)) return ['Start tall and keep your ribs controlled.','Pull elbows down toward your sides; avoid yanking behind the neck.','Return slowly to the top without letting the weight slam.'];
+   if(/curl/.test(n)) return ['Keep elbows close to your sides and wrists neutral.','Curl without swinging your torso.','Lower slowly to the starting position.'];
+   if(/triceps/.test(n)) return ['Keep upper arms steady and shoulders relaxed.','Move mainly at the elbows.','Extend smoothly, then return slowly without forcing the joint.'];
+   if(/lateral raise|reverse pec deck|face pull/.test(n)) return ['Use a light enough weight to stay controlled.','Move through a comfortable range without shrugging or swinging.','Lower slowly and keep tension on the target muscles.'];
+   if(/leg curl|calf raise/.test(n)) return ['Set the machine up so the joint lines up with its pivot.','Move smoothly and pause briefly at the contracted position.','Return slowly; avoid bouncing the weight.'];
+   if(/crunch|knee raise/.test(n)) return ['Brace your trunk and avoid swinging.','Move through a controlled range using your abs.','Return slowly and keep momentum out of the movement.'];
+   return ['Set up securely and choose a manageable weight.','Perform each repetition with controlled technique and a comfortable range.','Stop if you feel sharp pain; reduce the load if form breaks down.'];
+ }
+
+
+ function openExercise(el){
+   activeExercise=el;
+   const name=el.querySelector('.exname')?.textContent.trim()||'Exercise';
+   const reps=el.querySelector('.reps')?.textContent.trim()||'Follow workout plan';
+   const rest=restFor(name,reps);
+   document.getElementById('modalTitle').textContent=name;
+   document.getElementById('modalSubtitle').textContent='Exercise demonstration and form cues';
+   document.getElementById('modalSets').textContent=reps;
+   document.getElementById('modalRest').textContent=rest+' sec';
+   const q=encodeURIComponent(name+' proper form exercise Shorts');
+   const watchLink=document.getElementById('modalWatchLink');
+   watchLink.href='https://www.youtube.com/results?search_query='+q;
+   watchLink.setAttribute('aria-label','Watch '+name+' demonstrations on YouTube');
+   const list=document.getElementById('modalHowto'); list.innerHTML='';
+   cuesFor(name).forEach(t=>{const li=document.createElement('li');li.textContent=t;list.appendChild(li)});
+   modal.classList.add('open');document.body.style.overflow='hidden';
+ }
+ function closeExercise(){modal.classList.remove('open');document.body.style.overflow='';}
+ document.querySelectorAll('.exercise').forEach(el=>{
+   const name=el.querySelector('.exname')?.textContent.trim()||'exercise';
+   const detail=el.querySelector('.exdetail');
+   if(detail){const link=document.createElement('a');link.className='watch-link';link.href='https://www.youtube.com/results?search_query='+encodeURIComponent(name+' proper form exercise Shorts');link.target='_blank';link.rel='noopener';link.textContent='▶ Watch demo';link.setAttribute('aria-label','Watch '+name+' demonstration on YouTube');link.addEventListener('click',ev=>ev.stopPropagation());detail.insertAdjacentElement('afterend',link);}
+   el.setAttribute('role','button');el.setAttribute('tabindex','0');
+   el.addEventListener('click',ev=>{if(ev.target.tagName==='INPUT')return;openExercise(el)});
+   el.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();openExercise(el)}});
+ });
+ document.getElementById('closeModal').addEventListener('click',closeExercise);
+ modal.addEventListener('click',ev=>{if(ev.target===modal)closeExercise()});
+ document.addEventListener('keydown',ev=>{if(ev.key==='Escape')closeExercise()});
+ document.getElementById('doneExercise').addEventListener('click',()=>{
+   if(activeExercise){const cb=activeExercise.querySelector('input[type="checkbox"]');if(cb){cb.checked=true;cb.dispatchEvent(new Event('change'));}}
+   closeExercise();
+ });
+
+ function updateProgress(){
+   const exerciseBoxes=[...document.querySelectorAll('.workout input[type="checkbox"]')];
+   const checked=exerciseBoxes.filter(b=>b.checked).length;
+   document.getElementById('progressText').textContent=checked+' / '+exerciseBoxes.length+' exercises checked';
+   document.getElementById('progressFill').style.width=(exerciseBoxes.length?checked/exerciseBoxes.length*100:0)+'%';
+ }
+ document.getElementById('resetWeek').addEventListener('click',()=>{
+   if(!confirm('Clear all workout, cardio, and weekly checklist checkmarks?'))return;
+   boxes.forEach(b=>{b.checked=false;try{localStorage.removeItem(keyPrefix+b.id)}catch(e){}});
+   updateProgress();
+ });
+ document.getElementById('printBtn').addEventListener('click',()=>window.print());
+ updateProgress();
+})();
+</script>
+<style>
+@media print{html,body{background:#fff!important;color:#111!important}.wrap{max-width:none;padding:0}.card,.stat,.macro{background:#fff!important;color:#111!important;border-color:#ccc!important;break-inside:avoid}nav,.buttonrow,.progressbar{display:none!important}.muted,.exdetail,.daytop p,.macro span,.macro small,.footer{color:#444!important}.hero p{color:#333!important}.exercise{border-color:#ddd}.pill{color:#111;background:#eee}.note{background:#f5f5f5;color:#111;border-color:#ccc}.daybadge{background:#eee;color:#111}}
+</style>
+</body>
+</html>
